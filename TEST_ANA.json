@@ -1,0 +1,1073 @@
+{
+  "name": "TEST_ANA",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "File",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        656,
+        48
+      ],
+      "id": "ad8903f6-484b-498e-ad1d-37c17c69613d",
+      "name": "dosya işleme1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a307505-bf50-4d34-ba2d-1d8c38a06bb4",
+              "name": "KullanıcıPromptu",
+              "value": "={{ $('On form submission1').item.json['Prompt gir'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1dc57b40-d2b2-481b-98a1-018113403165",
+              "name": "EgitimMateryali",
+              "value": "={{ $('dosya işleme1').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "9a5efcd1-fc72-46d5-a85d-e9cea44cc362",
+              "name": "IcerikUzunluk",
+              "value": "={{ $('On form submission1').item.json.uzunluk }}",
+              "type": "string"
+            },
+            {
+              "id": "5eed797c-ef6b-4292-aea8-3e32c4d0a852",
+              "name": "IcerikKitleSeviyesi",
+              "value": "={{ $('On form submission1').item.json.Seviye }}",
+              "type": "string"
+            },
+            {
+              "id": "7f809120-d81b-4f64-aded-f20b57748f36",
+              "name": "Konu Sayısı",
+              "value": "={{ $('On form submission1').item.json.uzunluk?.toLowerCase() === 'kısa' ? 3 : 6 }}\n",
+              "type": "string"
+            },
+            {
+              "id": "e153f868-ee9c-4406-938a-ba4df59bc73e",
+              "name": "Döküman",
+              "value": "={{ Math.floor(Math.random() * 100) }}",
+              "type": "string"
+            },
+            {
+              "id": "37983ab0-e0a7-46ac-9b93-fd6ff4c9529d",
+              "name": "Proje Adı",
+              "value": "={{ $('On form submission1').item.json['Proje Adı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1120,
+        48
+      ],
+      "id": "adff3d32-d1f6-442b-b428-715e48630948",
+      "name": "veri standartizasyonu1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=KullanıcıPromptu: {{ $json['KullanıcıPromptu'] }}\n\nEgitimMateryali: {{ $json.EgitimMateryali }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Sen deneyimli bir video içerik tasarımcısısın.\n\nGirdi parametreleri:\n• KullaniciPromptu   → Videonun hedefi / odak noktası  \n• EgitimMateryali    → İşlenecek kaynak metin (parse edilmiştir)  \n\nGörev: EgitimMateryali’ni inceleyerek öğretici video için maksimum {{ $json['Konu Sayısı'] }} konu sayısından oluşan KullanıcıPromptunu karşılayan bir konu taslağı çıkarmak.  \n\n\nHer konu nesnesi yalnızca aşağıdaki üç alanı içerir (başka anahtar ekleme):\n\n1. \"icerik\"  : Konuda anlatılacak temel fikirlerin 2-3 cümlelik özeti  \n2. \"amac\"    : İzleyicinin bölümden öğreneceği bilgi / beceri  \n3. \"anahtar_kelimeler\" : 3-6 maddelik anahtar kelime dizisi (her biri tek sözcük veya kısa tamlama)\n\nKurallar\n- Kaynaktan kopyalama yapma; içerikleri yeniden formüle et.  \n- Açıklamalar sade, teknik olmayan dilde olsun.  \n- Çıktı yalnızca geçerli JSON olsun; yorum, satır sonu açıklaması, fazladan alan vb. ekleme.  \n- Nesne ve alan adlarını bire bir koru, sıralamayı icerik → amac → anahtar_kelimeler şeklinde tut.\n\n---\n\n#### Örnek Çıktı (kısa video ⇒ 2 konu gösterimi)\n\n{\n  \"konular\": [\n    {\n      \"konu_id\": 1,\n      \"icerik\": \"Bu bölüm, konunun tarihsel gelişimini özetleyerek temel kavramları tanıtır.\",\n      \"amac\": \"İzleyici, kavramın nasıl ortaya çıktığını ve neden önemli olduğunu kavrar.\",\n      \"anahtar_kelimeler\": \"tarihçe, temel_kavram, giriş\"\n    },\n    {\n      \"konu_id\": 2,\n      \"icerik\": \"Bu bölümde yöntemin adım adım nasıl uygulandığı örneklerle açıklanır.\",\n      \"amac\": \"İzleyici, yöntemi kendi projesinde uygulamak için gerekli adımları öğrenir.\",\n      \"anahtar_kelimeler\": \"uygulama, adımlar, örnek\"\n    }\n  ]\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        368,
+        432
+      ],
+      "id": "f91d2c3b-7e4b-4398-aaaf-8a10e965bb57",
+      "name": "konu taslağı üretimi1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7bb51b06-1623-43ed-b628-4b1707189be7",
+              "name": "KullaniciPromptu",
+              "value": "={{ $('veri standartizasyonu1').item.json['KullanıcıPromptu'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e2c17ca9-5833-4955-819e-34ccdb9d8085",
+              "name": "EgitimMateryali",
+              "value": "={{ $('veri standartizasyonu1').item.json.EgitimMateryali }}",
+              "type": "string"
+            },
+            {
+              "id": "efb4d60b-b4fc-49e9-8fc9-11a9626cce9c",
+              "name": "IcerikUzunluk",
+              "value": "={{ $('veri standartizasyonu1').item.json.IcerikUzunluk }}",
+              "type": "string"
+            },
+            {
+              "id": "5107666e-7f41-4896-97fa-977282a820f8",
+              "name": "IcerikKitleSeviyesi",
+              "value": "={{ $('veri standartizasyonu1').item.json.IcerikKitleSeviyesi }}",
+              "type": "string"
+            },
+            {
+              "id": "0d203b60-61a9-4928-b58f-bc844e8dd89b",
+              "name": "Bölümler",
+              "value": "={{ $('konu taslağı üretimi1').item.json.output }}",
+              "type": "object"
+            },
+            {
+              "id": "860d0c97-ead2-4d39-8867-f57dc10cf796",
+              "name": "Döküman",
+              "value": "={{ $('veri standartizasyonu1').item.json['Döküman'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a570e914-b010-409c-b7fb-aebe20c0c98d",
+              "name": "KonuSayısı",
+              "value": "={{ Math.max.apply(null, $('konu taslağı üretimi1').item.json.output.konular.map(k => k.konu_id)) }}",
+              "type": "number"
+            },
+            {
+              "id": "d18b9b5b-0d3a-4a73-95a3-a084ae6f7f3e",
+              "name": "ProjeAdı",
+              "value": "={{ $('veri standartizasyonu1').item.json['Proje Adı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        432
+      ],
+      "id": "b872c344-fafe-4572-a5ae-d19496b70d08",
+      "name": "veri standartizasyonu3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const projeAdi = $('veri standartizasyonu1').item.json['Proje Adı'];\nconst konular = $input.first().json.output.konular;\nconst basePath = `C:\\\\Users\\\\slizzle\\\\Documents\\\\n8n\\\\${projeAdi}`;\nlet komutlar = [];\n\n// Ana klasörler\nkomutlar.push(`mkdir \"${basePath}\"`);\nkomutlar.push(`mkdir \"${basePath}\\\\Konular\"`);\nkomutlar.push(`mkdir \"${basePath}\\\\VideoBölümler\"`);\n\n// Konu klasörleri\nif (Array.isArray(konular)) {\n  for (let i = 0; i < konular.length; i++) {\n    const konuNo = `Konu${i + 1}`;\n    komutlar.push(`mkdir \"${basePath}\\\\Konular\\\\${konuNo}\"`);\n    komutlar.push(`mkdir \"${basePath}\\\\Konular\\\\${konuNo}\\\\Görseller\"`);\n    komutlar.push(`mkdir \"${basePath}\\\\Konular\\\\${konuNo}\\\\Slidelar\"`);\n  }\n}\n\nreturn [\n  {\n    json: {\n      komut: komutlar.join(\" && \")\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        864,
+        432
+      ],
+      "id": "ee3eb05f-f55c-420a-9ab2-9d9fe25ce363",
+      "name": "Code3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"konular\": [{\"konu_id\": 1,\"icerik\": \"Bu bölüm, konunun tarihsel gelişimini özetleyerek temel kavramları tanıtır.\", \"amac\": \"İzleyici, kavramın nasıl ortaya çıktığını ve neden önemli olduğunu kavrar.\",\"anahtar_kelimeler\": \"tarihçe, temel_kavram, giriş\"},{\"konu_id\": 2,\"icerik\": \"Bu bölümde yöntemin adım adım nasıl uygulandığı örneklerle açıklanır.\",\"amac\": \"İzleyici, yöntemi kendi projesinde uygulamak için gerekli adımları öğrenir.\",\"anahtar_kelimeler\": \"uygulama, adımlar, örnek\"}]}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        544,
+        640
+      ],
+      "id": "3085108f-16a6-4473-98d3-eeb4264d7972",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "content": "# Kullanıcı Girdisi\n## Form Submission\n## PDF Parsing\n## Create Doc\n## Edit Fields\n## LLM: Konu Taslağı Üret\n### Doc Update\n## Edit Fields\n## Split Out",
+        "height": 736,
+        "width": 1600,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        80
+      ],
+      "id": "4f77fb05-fcf3-4cdc-b452-f6c0c20d4245",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "['Bölümler'].konular",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        432
+      ],
+      "id": "eacb70b3-2777-4342-a949-cd7a84c460c8",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Girdi: Konu sayısı\nvar videoCount = $('veri standartizasyonu3').first().json['KonuSayısı']; // Örn: 2 veya 3\n\nif (!Number.isInteger(videoCount) || videoCount < 2) {\n  throw new Error(\"KonuSayısı integer ve en az 2 olmalı.\");\n}\n\n// ---- Sabit yollar ----\nvar base = \"C:/Users/busra/OneDrive/Desktop/AlevPenceOtomasyonu/Proje\";\nvar inputDir = base + \"/VideoBölümler\";\nvar finalPath = base + \"/Final.mp4\";\n\n// ---- Giriş argümanları ----\nvar inputArgs = [];\nfor (var i = 1; i <= videoCount; i++) {\n  inputArgs.push('-i \"' + inputDir + '/output' + i + '.mp4\"');\n}\n\n// ---- filter_complex oluşturma ----\nvar streams = \"\";\nfor (var j = 0; j < videoCount; j++) {\n  streams += '[' + j + ':v:0][' + j + ':a:0]';\n}\nvar filterComplex = streams + 'concat=n=' + videoCount + ':v=1:a=1[outv][outa]';\n\n// ---- Map ve codec satırları ----\nvar mapLine   = '-map \"[outv]\" -map \"[outa]\"';\nvar codecLine = '-c:v libx264 -pix_fmt yuv420p -c:a aac -b:a 192k -movflags +faststart';\n\n// ---- Tam komut ----\nvar ffmpegCommand =\n  'ffmpeg ' + inputArgs.join(' ') + ' ' +\n  '-filter_complex \"' + filterComplex + '\" ' +\n  mapLine + ' ' + codecLine + ' \"' + finalPath + '\"';\n\n// Çıktı\nreturn [{ json: { ffmpegCommand: ffmpegCommand } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2048,
+        352
+      ],
+      "id": "dbf7efde-dcc8-4e54-a0ef-747a73e39296",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "MhBXAFgVjvxZryLS",
+          "mode": "list",
+          "cachedResultName": "TEST_Child"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        3888,
+        720
+      ],
+      "id": "490cfbdd-ff8f-4eb7-883a-9b052e06787a",
+      "name": "Execute Workflow",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da741e28-e211-4737-b8d5-91a0310b9ead",
+              "name": "KonuId",
+              "value": "={{ $json.KonuId }}",
+              "type": "number"
+            },
+            {
+              "id": "f0095469-7de6-4596-af7c-3e31cdb32f5c",
+              "name": "SlideCount",
+              "value": "={{ $json.SlideCount }}",
+              "type": "number"
+            },
+            {
+              "id": "62d14bea-9b97-4554-be45-1c571ec5e909",
+              "name": "SaniyeBundle",
+              "value": "={{ $json.SaniyeBundle }}",
+              "type": "array"
+            },
+            {
+              "id": "c4222e65-b6db-4ac8-aaf0-323b3dfcba66",
+              "name": "output",
+              "value": "={{ $('Slide Üretme').item.json.output }}",
+              "type": "object"
+            },
+            {
+              "id": "0ad95819-0336-4f87-aa14-3231616ef649",
+              "name": "ProjeAdı",
+              "value": "={{ $('veri standartizasyonu3').item.json['ProjeAdı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3648,
+        720
+      ],
+      "id": "9c374532-fbb7-4102-9e6b-3a36ad927057",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Function Item node\n// Input ($json): { output: { KonuId, slides: [{ id, start_time, end_time }], totalSlides? } }\n// Output: { KonuId: number, SlideCount: number, SaniyeBundle: number[] }\n\nconst out = $json.output ?? $json;\nconst slides = Array.isArray(out?.slides) ? out.slides : [];\n\nconst numFromId = (s) => {\n  const m = String(s || \"\").match(/\\d+/);\n  return m ? Number(m[0]) : Number.POSITIVE_INFINITY;\n};\n\nconst slidesSorted = [...slides].sort((a, b) => {\n  const ta = Number(a?.start_time) || 0;\n  const tb = Number(b?.start_time) || 0;\n  if (ta !== tb) return ta - tb;\n  return numFromId(a?.id) - numFromId(b?.id);\n});\n\nconst SaniyeBundle = slidesSorted.map(s => {\n  const start = Number(s?.start_time) || 0;\n  const end = Number(s?.end_time) || 0;\n  const dur = Math.max(0, end - start);\n  return Number(dur.toFixed(3));\n});\n\nconst KonuId = Number(out?.KonuId) || 0;\nconst SlideCount = slidesSorted.length;\n\nreturn { KonuId, SlideCount, SaniyeBundle };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3440,
+        720
+      ],
+      "id": "18f22a2f-45fc-492a-87ff-82f75f7ce811",
+      "name": "Code2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=C:\\\\Users\\\\slizzle\\\\Documents\\\\n8n\\\\Konu{{ $('İçerik Üretimi1').item.json.output.KonuId }}\\\\Ses{{ $('İçerik Üretimi1').item.json.output.KonuId }}.mp3",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        2624,
+        752
+      ],
+      "id": "e13dd7c0-ab46-45f5-96e4-f6e0d74382da",
+      "name": "Read/Write Files from Disk2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node için—tek bir string içinde \"[[start-end]]: sentence\" formatında cümleleri ve ses süresini verir:\n\n// 1) İlk input öğesinden words dizisini alın\nconst words = $input.first().json.words || [];\n\n/* \n * words dizisinden cümleleri start/end timestamp ile oluşturur.\n * @param {Array} words - [{ text, start, end, type, … }, …]\n * @returns {Array} sentences - [{ text, start, end }, …]\n */\nfunction reconstructSentences(words) {\n  const sentences = [];\n  let currentText = '';\n  let sentenceStart = null;\n\n  for (const { text, start, end, type } of words) {\n    if (type === 'word' || type === 'spacing') {\n      if (sentenceStart === null && type === 'word') {\n        sentenceStart = start;\n      }\n      currentText += text;\n      if (text.includes('.')) {\n        sentences.push({ text: currentText.trim(), start: sentenceStart, end });\n        currentText = '';\n        sentenceStart = null;\n      }\n    }\n  }\n\n  // Nokta ile bitmeyen son cümle varsa ekle\n  if (currentText.trim()) {\n    sentences.push({\n      text: currentText.trim(),\n      start: sentenceStart,\n      end: words[words.length - 1].end,\n    });\n  }\n\n  return sentences;\n}\n\n// 2) Cümleleri hesapla\nconst sentences = reconstructSentences(words);\n\n// 3) Tek bir string oluştur: \"[[start-end]]: sentence\"\nconst result = sentences\n  .map(s => `[[${s.start.toFixed(3)}-${s.end.toFixed(3)}]]: ${s.text}`)\n  .join('\\n');\n\n// 4) Ses süresini hesapla\n// Son cümlenin veya son kelimenin 'end' değeri\nconst lastEnd = sentences.length\n  ? sentences[sentences.length - 1].end\n  : (words.length ? words[words.length - 1].end : 0);\nconst audioDuration = Math.ceil(lastEnd + 1);\n\n// 5) KonuId'yi doğrudan input'tan al\nconst KonuId = $('İçerik Üretimi1').first().json.output.KonuId ?? null;\n\n// 6) Sonucu tek bir alan olarak döndür\nreturn [\n  {\n    json: {\n      result,\n      audioDuration,\n      KonuId\n    },\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2864,
+        752
+      ],
+      "id": "14bb1512-1f0e-4608-a4e3-ba799fdaebf6",
+      "name": "Code",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3120,
+        912
+      ],
+      "id": "8cc01750-fefa-43e2-8e63-70abaa9b0a12",
+      "name": "OpenAI Chat Model2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Slide Üretme\n",
+        "height": 368,
+        "width": 736,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        640
+      ],
+      "id": "f2e6e7a5-6fca-4aad-a416-c99f19f83636",
+      "name": "Sticky Note4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Transcript:  {{ $json.result }}\nAudioDuration: {{ $json.audioDuration }}\nKonuId: {{ $json.KonuId }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are an AI Agent in n8n. Your input is:\n  • A transcript with embedded timestamps (format [[start-end]])\n  • The total audio duration in seconds\n\nYour output must be a single JSON object with:\n{\n  \"KonuId\": \"{{ $json.KonuId }}\",\n  \"slides\": [\n    {\n      \"id\": \"Slide1\",\n      \"start_time\": 0.099,\n      \"end_time\": 19.499,\n      \"type\": \"headline\",\n      \"content\": \"Riskli coğrafi konumumuz nedeniyle hazırlıklı olmak hayati öneme sahiptir.\"\n    },\n    {\n      \"id\": \"Slide2\",\n      \"start_time\": 20.000,\n      \"end_time\": 30.039,\n      \"type\": \"bullet\",\n      \"content\": \"Deprem çantasında olması gerekenler:`n`n- Fener ve yedek piller\\n- Taşınabilir radyo\\n- Temel ilk yardım kiti\\n- Su ve dayanıklı atıştırmalıklar\"\n    }\n  ],\n  \"totalSlides\": 2\n}\n\n\nSlide Type Determination:\n  • “headline”: for a single, standalone, high-impact statement that sets the tone  \n  • “bullet”: for a list of related items or steps. *Begin with a concise explanatory heading ending with a colon, then list each item on its own line, separated by “\\n\\n”\n\nFormatting and Rules:\n  1. Generate **new*, supportive slide text—do not copy the transcript verbatim.  \n  2. Cover all meaningful segments using as few slides as necessary.  \n  3. Align each slide’s start_time and end_time exactly with the transcript timestamps.  \n  4. Ensure each slide’s end_time is strictly less than the next slide’s start_time.  \n  5. Respect the speaker’s intent and emotional emphasis; paraphrase to support the narrative.  \n  6. Output valid JSON only, with no additional prose outside the object.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        3088,
+        720
+      ],
+      "id": "bad1dbc0-1cde-4843-bec6-eaca061dfefa",
+      "name": "Slide Üretme",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"KonuId\": \"{{ $json.KonuId }}\",\n  \"slides\": [\n    {\n      \"id\": \"Slide1\",\n      \"start_time\": 0.099,\n      \"end_time\": 19.499,\n      \"type\": \"headline\",\n      \"content\": \"Riskli coğrafi konumumuz nedeniyle hazırlıklı olmak hayati öneme sahiptir.\"\n    },\n    {\n      \"id\": \"Slide2\",\n      \"start_time\": 20.000,\n      \"end_time\": 30.039,\n      \"type\": \"bullet\",\n      \"content\": \"Deprem çantasında olması gerekenler:`n`n- Fener ve yedek piller\\n- Taşınabilir radyo\\n- Temel ilk yardım kiti\\n- Su ve dayanıklı atıştırmalıklar\"\n    }\n  ],\n  \"totalSlides\": 2\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        3296,
+        896
+      ],
+      "id": "e4c23d40-b47b-4d76-a16b-03a52386b441",
+      "name": "Structured Output Parser",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Ses dosyası & Transcript Üretimi\nNe zaman",
+        "height": 240,
+        "width": 592,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        640
+      ],
+      "id": "530919ae-238f-4b96-aacf-432ef34c413d",
+      "name": "Sticky Note3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": "={{ false }}"
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1744,
+        432
+      ],
+      "id": "3ca27bdf-76e4-44f4-b059-ee087547ad8c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Icerik\": \"<insert the incoming Icerik variable exactly as received>\",\n  \"Script_SesFormat\": \"<combine the content with the generated script, enriched with the required ElevenLabs syntax, ready for narration>\",\n  \"KonuId\": \"<{{ $json['Bölümler'].konular[0].konu_id }}>\"\n}\n",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2064,
+        960
+      ],
+      "id": "7f3e0ac6-c7f9-46b5-bb74-05d748acb5c3",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=• Icerik                → {{ $json['[\\'Bölümler\\'].konular'].icerik }}\n• Amac                  → {{ $json['[\\'Bölümler\\'].konular'].amac }}\n• Anahtar_Kelimeler     → {{ $json['[\\'Bölümler\\'].konular'].anahtar_kelimeler }}\n• HedefKitleSeviyesi    →  {{ $json.IcerikKitleSeviyesi }}\n• VideoUzunlugu    → {{ $json.IcerikUzunluk }}\n• KonuId           → {{ $json['[\\'Bölümler\\'].konular'].konu_id }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Sen deneyimli bir video içerik tasarımcısı ve metin yazarı olan bir AI agentsın.\n\n🔹 Girdi Parametreleri\n• Icerik → Kullanıcının sağladığı ana konu açıklaması (string)\n• Amac → Bu Icerik'in izleyiciye kazandıracağı hedef (string)\n• Anahtar_Kelimeler → [\"...\", \"...\", ...] biçiminde tam anahtar kelime listesi\n• VideoUzunlugu → \"kısa\" veya \"uzun\"\n• HedefKitleSeviyesi → \"yeni başlayan\" veya \"deneyimli\"\n\n🔹 Görevler\n\nMetin Oluşturma\nIcerik + Amac’ın bütününü, Anahtar_Kelimeler’i harfiyen içinde geçirerek tutarlı ve akıcı bir konuşma metni (Script) yaz.\nUzunluk\n• VideoUzunlugu = \"kısa\" ise en az 5 cümle,\n• VideoUzunlugu = \"uzun\" ise en az 10 cümle üret.\nÜst sınır serbest.\nHitap Şekli\nMetinde “Siz” hitabını kullan. Sadece ve Sadece konu_id 1 ise “Merhabalar” gibi giriş cümlesi kullan ve konu_id 1'inde başlangıcında olsun kesinlikle orta kısımlarında “Merhabalar” gibi giriş cümleleri olmasın. Konu_id 1 değil ise selamlama yapma; konuşmana devam ediyormuş gibi yaz.\nHedef Kitleye Uygunluk\n• “yeni başlayan” için: 10 yaşındaki bir çocuğun da kavrayacağı sade anlatım ve düşük teknik terim.\n• “deneyimli” için: Yoğun terminoloji ve profesyonel dil.\nMetin Bütünlüğü\nOrijinal anlamı bozma; gereksiz tekrar ve dolgu ifadelerden kaçın. Anahtar_Kelimeler’i değiştirme; bağlama uygun şekilde doğal akışta kullan.\nDinamik Akış\nGirişte merak uyandır; gelişmede öğretici ve enerjik ol; sonuçta güven ver. Bölümler arası geçişleri tutarlı kur.\n🔹 Çıktı Formatı (Zorunlu)\nAI çıktısı kesinlikle yalnızca aşağıdaki JSON yapısında olmalıdır — başka hiçbir anahtar, yorum veya metin eklenmeyecektir:\n\n{\n  \"Icerik\": \"<gelen Icerik değişkenini aynen koy>\",\n  \"Script_SesFormat\": \"<Icerik ve oluşturduğun Script’i birleştir; tek blok hâlinde sun; TTS veya etiket kullanma>\"\n  \"KonuId\": \"<{{ $json['[\\'Bölümler\\'].konular'].konu_id }}>\"\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        1984,
+        768
+      ],
+      "id": "a585a22f-21c0-4da7-92e1-9aaf128b3c87",
+      "name": "İçerik Üretimi1"
+    },
+    {
+      "parameters": {
+        "content": "# Script Üretimi\n## LLM: Script Üret",
+        "height": 512,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        640
+      ],
+      "id": "5c9ce9cb-0603-4824-9ac8-2eb0d476ef3d",
+      "name": "Sticky Note2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# LOOP",
+        "height": 784,
+        "width": 2432,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1696,
+        560
+      ],
+      "id": "4c292817-5d85-4a16-94c8-2643d3939bae",
+      "name": "Sticky Note",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Video Birleştirme\n",
+        "height": 256,
+        "width": 496,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2000,
+        256
+      ],
+      "typeVersion": 1,
+      "id": "3223feee-3848-4ede-944f-ceb388421dc4",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "SOYHLrjzK2X1ezoPC6cr",
+          "mode": "list",
+          "cachedResultName": "Harry - Fierce Warrior"
+        },
+        "text": "={{ $('İçerik Üretimi1').item.json.output.Script_SesFormat }}",
+        "additionalOptions": {
+          "model": {
+            "__rl": true,
+            "value": "eleven_monolingual_v1",
+            "mode": "list",
+            "cachedResultName": "Eleven English v1"
+          },
+          "languageCode": "en"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        752
+      ],
+      "id": "3236e416-65c1-400e-a545-9c359ee598b5",
+      "name": "Convert text to speech1",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "hqu6mhEInhVQGbqL",
+          "name": "ElevenLabs account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "operation": "speechToText",
+        "additionalOptions": {},
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        752
+      ],
+      "id": "1633f4d4-f960-4067-b9ea-34fefeb73437",
+      "name": "Transcribe audio or video",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "hqu6mhEInhVQGbqL",
+          "name": "ElevenLabs account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        224,
+        640
+      ],
+      "id": "8b03aadd-abba-47ea-8e7e-eff7b648d1e6",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fRgOfFmufmEG22la",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "form",
+        "formDescription": "içerik",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Proje Adı",
+              "placeholder": "Proje Adı",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "File",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .docx",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Prompt gir",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "uzunluk",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "uzun"
+                  },
+                  {
+                    "option": "kısa"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Seviye",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "yeni başlayan"
+                  },
+                  {
+                    "option": "deneyimli"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Gönder",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Gönderildi"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        48
+      ],
+      "id": "699daea8-90cb-4c62-9cda-b8f26bd3685b",
+      "name": "On form submission1",
+      "webhookId": "5928e5ed-6429-4add-ad49-d2b7dbd17e00"
+    },
+    {
+      "parameters": {
+        "folderId": "1i9td3hylkwrSa6FP1F1WUsiEMkuMTuu1",
+        "title": "={{ $('On form submission1').item.json.submittedAt }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        880,
+        48
+      ],
+      "id": "4c85eece-26a8-406a-8e05-0d3e2bfb3e09",
+      "name": "Create a document",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "dNdhYmoU68tsAV5C",
+          "name": "Google Docs account 2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "resource": "folder",
+        "name": "={{ $('veri standartizasyonu1').item.json['Döküman'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "root",
+          "mode": "list",
+          "cachedResultName": "/ (Root folder)",
+          "cachedResultUrl": "https://drive.google.com/drive"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        688,
+        432
+      ],
+      "id": "2a92fd67-b4b9-4626-8c5d-7e0d956eee00",
+      "name": "Create folder",
+      "credentials": {
+        "googleApi": {
+          "id": "v3ZfE4PnsdTdCXSd",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1872,
+        1008
+      ],
+      "id": "69533060-a0b9-429c-8123-957b2e610787",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fRgOfFmufmEG22la",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "dosya işleme1": {
+      "main": [
+        [
+          {
+            "node": "Create a document",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "veri standartizasyonu1": {
+      "main": [
+        [
+          {
+            "node": "konu taslağı üretimi1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "konu taslağı üretimi1": {
+      "main": [
+        [
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "veri standartizasyonu3": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "konu taslağı üretimi1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk2": {
+      "main": [
+        [
+          {
+            "node": "Transcribe audio or video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Slide Üretme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Slide Üretme",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slide Üretme": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Slide Üretme",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "İçerik Üretimi1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "İçerik Üretimi1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "İçerik Üretimi1": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe audio or video": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "konu taslağı üretimi1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "veri standartizasyonu3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission1": {
+      "main": [
+        [
+          {
+            "node": "dosya işleme1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a document": {
+      "main": [
+        [
+          {
+            "node": "veri standartizasyonu1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "İçerik Üretimi1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech1": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "36346aeb-e553-4da5-9235-14075c0cfdf8",
+  "meta": {
+    "instanceId": "a3ac0f7efedaa0d446b4a1394dcd4eb54d9c4adf3e9b048bf3e92872dd3c90aa"
+  },
+  "id": "97PmRf6cvjBJtWmPbQNL0",
+  "tags": []
+}

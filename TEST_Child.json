@@ -1,0 +1,278 @@
+{
+  "name": "TEST_Child",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "7600028c-33bb-4607-91aa-93b9262a623d",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "batchSize": "=1",
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        256,
+        144
+      ],
+      "id": "77daf7d6-0e5d-416a-8ecc-cd35c6e21d4e",
+      "name": "Loop Over Items1",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "prompt": "={{ $json.output.substring(0, 999) }}",
+        "options": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        400
+      ],
+      "id": "d511a215-ae0e-46dc-9580-2629d3ec4982",
+      "name": "Görsel Üretimi"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Edit Fields2').item.json.ImagePath }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        592
+      ],
+      "id": "ecc332c8-caa6-4a0c-b66a-1bba338c3cc4",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=content: {{ $('Edit Fields2').item.json.output.slides.content }}",
+        "options": {
+          "systemMessage": "You are an experienced visual design expert and prompt engineer.  \nInput:  \n  • content (string): the video’s main message to display in the foreground  \n\nTask:  \n  • Produce exactly one detailed image-generation prompt (string) describing a background illustration that visually supports the given content.  \n\nRequirements:  \n  1. Focus solely on generating a background scene—do not repeat or paraphrase the content text itself.  \n  2. Include style, composition, color palette, lighting, perspective, and key visual elements that reinforce the content’s theme.  \n  3. Ensure the scene feels cohesive and professional, suitable as a subtle, non-distracting video backdrop.  \n  4. Write fluently, without any grammar or spelling errors.  \n  5. Output only the prompt string—no additional JSON, labels, or commentary.\n  6. Your output must be less than 1000 characters\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        400
+      ],
+      "id": "f119b18a-dc52-43a9-8602-cf2e3b11f9b9",
+      "name": "Görsel Prompt Üretimi"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        704,
+        624
+      ],
+      "id": "c5fc5a63-2b5c-45a6-8a98-0e7f35864e33",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.slides",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        48,
+        144
+      ],
+      "id": "bfdbfbe4-4f1d-4d09-ac56-c3e371a855e0",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "content": "# LOOP 2\n",
+        "height": 816,
+        "width": 1328,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fceec5d0-3f58-4fea-bc46-3d0a157846d5",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "# Görsel Üretimi",
+        "height": 480,
+        "width": 1040,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        288,
+        336
+      ],
+      "id": "55d31157-2a29-4049-876d-0e3b38ff18df",
+      "name": "Sticky Note5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# Video Üretimi",
+        "height": 224,
+        "width": 384,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        608,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "17a9b0c9-293b-4998-b772-853b34b5e7f1",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "const konuId = $('Split Out').first().json.KonuId;\nconst slideCount = $('Split Out').first().json.SlideCount;\nconst saniyeBundle = $('Split Out').first().json.SaniyeBundle;\n\nconst base = \"C:/Users/busra/OneDrive/Desktop/AlevPenceOtomasyonu/Proje/Konular\";\nconst konuPath = `${base}/Konu${konuId}`;\nconst imgDir = `${konuPath}/Görseller`;\nconst textDir = `${konuPath}/Slidelar`;\nconst audioPath = `${konuPath}/Ses${konuId}.mp3`;\nconst outputPath = `C:/Users/busra/OneDrive/Desktop/AlevPenceOtomasyonu/Proje/VideoBölümler/output${konuId}.mp4`;\n\nfunction fixPath(p) {\n  let s = p.replace(/\\\\/g, \"/\");\n  s = s.replace(/:/, \"\\\\:\");\n  return s;\n}\n\nconst fontFileEscaped = fixPath(\"C:\\\\Windows\\\\Fonts\\\\calibrib.ttf\");\n\nconst imageInputs = [];\nfor (let i = 1; i <= slideCount; i++) {\n  const dur = saniyeBundle[i - 1];\n  const imgPath = `${imgDir}/GorselSlide${i}.jpg`;\n  imageInputs.push(`-loop 1 -t ${dur} -i \"${imgPath}\"`);\n}\n\nconst filterBlocks = [];\nfor (let i = 1; i <= slideCount; i++) {\n  const idx = i - 1;\n  const txtPathRaw = `${textDir}/Slide${i}.txt`;\n  const txtPath = fixPath(txtPathRaw);\n\n  const block = `[${idx}:v]scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080,setsar=1,format=yuv420p,` +\n    `drawbox=x=0:y=0:w=iw:h=ih:color=white@0.3:t=fill,` +\n    `drawtext=fontfile='${fontFileEscaped}':textfile='${txtPath}':fontcolor=white:fontsize=32:` +\n    `x=(w-text_w)/2:y=(h-text_h)/2:shadowcolor=black:shadowx=4:shadowy=4:box=1:` +\n    `boxcolor=black@0.6:boxborderw=50:line_spacing=4[v${idx}]`;\n\n  filterBlocks.push(block);\n}\n\nconst vChain = Array.from({ length: slideCount }, (_, k) => `[v${k}]`).join(\"\");\nconst concatFilter = `${vChain}concat=n=${slideCount}:v=1:a=0,format=yuv420p[video]`;\n\nconst filterComplex = filterBlocks.join(\";\") + \";\" + concatFilter;\n\nconst mapLine = `-map \"[video]\" -map ${slideCount}:a`;\nconst codecLine = `-c:v libx264 -c:a aac -b:a 192k -shortest \"${outputPath}\"`;\n\nconst ffmpegCommand =\n  \"ffmpeg \" +\n  imageInputs.join(\" \") + \" \" +\n  `-i \"${audioPath}\" ` +\n  `-filter_complex \"${filterComplex}\" ` +\n  `${mapLine} ` +\n  `${codecLine}`;\n\nreturn [{ json: { ffmpegCommand } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        80
+      ],
+      "id": "59a401e3-2c18-4ff7-a3d0-eec81535357b",
+      "name": "Video üretme servisi ffmpeg"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "Video üretme servisi ffmpeg",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Görsel Prompt Üretimi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Görsel Üretimi": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Görsel Prompt Üretimi": {
+      "main": [
+        [
+          {
+            "node": "Görsel Üretimi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Görsel Prompt Üretimi",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "07415452-a472-482c-ac3f-1083d17b650b",
+  "meta": {
+    "instanceId": "a3ac0f7efedaa0d446b4a1394dcd4eb54d9c4adf3e9b048bf3e92872dd3c90aa"
+  },
+  "id": "1HEyhiAHm_tvydq_rmEQk",
+  "tags": []
+}

@@ -41,11 +41,12 @@
       "type": "n8n-nodes-base.openAi",
       "typeVersion": 1,
       "position": [
-        1056,
+        1360,
         400
       ],
       "id": "d511a215-ae0e-46dc-9580-2629d3ec4982",
-      "name": "Görsel Üretimi"
+      "name": "Görsel Üretimi",
+      "disabled": true
     },
     {
       "parameters": {
@@ -56,18 +57,19 @@
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1,
       "position": [
-        1072,
+        1440,
         592
       ],
       "id": "ecc332c8-caa6-4a0c-b66a-1bba338c3cc4",
-      "name": "Read/Write Files from Disk"
+      "name": "Read/Write Files from Disk",
+      "disabled": true
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=content: {{ $('Edit Fields2').item.json.output.slides.content }}",
+        "text": "=content: {{ $('Loop Over Items1').item.json.output.slides.content }}",
         "options": {
-          "systemMessage": "You are an experienced visual design expert and prompt engineer.  \nInput:  \n  • content (string): the video’s main message to display in the foreground  \n\nTask:  \n  • Produce exactly one detailed image-generation prompt (string) describing a background illustration that visually supports the given content.  \n\nRequirements:  \n  1. Focus solely on generating a background scene—do not repeat or paraphrase the content text itself.  \n  2. Include style, composition, color palette, lighting, perspective, and key visual elements that reinforce the content’s theme.  \n  3. Ensure the scene feels cohesive and professional, suitable as a subtle, non-distracting video backdrop.  \n  4. Write fluently, without any grammar or spelling errors.  \n  5. Output only the prompt string—no additional JSON, labels, or commentary.\n  6. Your output must be less than 1000 characters\n"
+          "systemMessage": "You are an elite visual prompt engineer for professional educational video production.\n\n## YOUR TASK\nProduce exactly one image-generation prompt (single paragraph, max 950 characters) per scene.\n\nNo text, letters, numbers, words, logos, trademarks, watermarks, signage, or UI elements anywhere in the image. All signs, screens, labels, and apparel completely blank."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -78,25 +80,6 @@
       ],
       "id": "f119b18a-dc52-43a9-8602-cf2e3b11f9b9",
       "name": "Görsel Prompt Üretimi"
-    },
-    {
-      "parameters": {
-        "model": {
-          "__rl": true,
-          "value": "gpt-4o",
-          "mode": "list",
-          "cachedResultName": "gpt-4o"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
-      "typeVersion": 1.2,
-      "position": [
-        704,
-        624
-      ],
-      "id": "c5fc5a63-2b5c-45a6-8a98-0e7f35864e33",
-      "name": "OpenAI Chat Model"
     },
     {
       "parameters": {
@@ -117,7 +100,7 @@
       "parameters": {
         "content": "# LOOP 2\n",
         "height": 816,
-        "width": 1328,
+        "width": 1696,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -133,7 +116,7 @@
       "parameters": {
         "content": "# Görsel Üretimi",
         "height": 480,
-        "width": 1040,
+        "width": 1408,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -174,9 +157,143 @@
       ],
       "id": "59a401e3-2c18-4ff7-a3d0-eec81535357b",
       "name": "Video üretme servisi ffmpeg"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        720,
+        624
+      ],
+      "id": "c3d8ece6-5200-40b2-b0e2-40f9445b0fef",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "fRgOfFmufmEG22la",
+          "name": "efe gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash-image",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+        },
+        "prompt": "={{ $json.output.substring(0, 999) }}",
+        "options": {
+          "binaryPropertyOutput": "data"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        1216,
+        400
+      ],
+      "id": "6b03421b-9211-46bf-8f7d-0c8bff00c635",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "6wh4RJIij8Jvx1kv",
+          "name": "cuneyt2"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1600,
+        592
+      ],
+      "id": "ddbe7196-0d0a-4218-b9b0-1380f7db6d3a",
+      "name": "Dosya Kaydet",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "=https://image.pollinations.ai/prompt/{{ $json.output }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "width",
+              "value": "500"
+            },
+            {
+              "name": "height",
+              "value": "500"
+            },
+            {
+              "name": "model",
+              "value": "flux"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "image.png"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        400
+      ],
+      "id": "5de13f66-8923-4765-afbc-29d1cda4522e",
+      "name": "resim üretme"
+    },
+    {
+      "parameters": {
+        "url": "https://generativelanguage.googleapis.com/v1beta/models",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyAiYwbhma8R1L-_UKKe5mDrwqfLXHJAigc"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1136,
+        832
+      ],
+      "id": "7b3f150e-0957-47a7-99c3-83f0b097df54",
+      "name": "resim üretme1",
+      "disabled": true
     }
   ],
-  "pinData": {},
+  "pinData": {
+    "Görsel Prompt Üretimi": [
+      {
+        "json": {
+          "output": "Minimalist abstract background illustration. A harmonious blend of soft, diffused light and subtle, undulating organic shapes in a cool, professional palette of muted teals, lavenders, and grays. Gentle, ambient lighting creates a serene, non-distracting depth. The composition features a clean, open central area, with blurred, soft-focus elements receding slightly into the background, providing a professional and modern aesthetic suitable for a video screen."
+        }
+      }
+    ]
+  },
   "connections": {
     "Loop Over Items1": {
       "main": [
@@ -211,7 +328,7 @@
       "main": [
         [
           {
-            "node": "Loop Over Items1",
+            "node": "Dosya Kaydet",
             "type": "main",
             "index": 0
           }
@@ -222,19 +339,8 @@
       "main": [
         [
           {
-            "node": "Görsel Üretimi",
+            "node": "resim üretme",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "OpenAI Chat Model": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "Görsel Prompt Üretimi",
-            "type": "ai_languageModel",
             "index": 0
           }
         ]
@@ -261,18 +367,69 @@
           }
         ]
       ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Görsel Prompt Üretimi",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Görsel Üretimi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dosya Kaydet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "resim üretme": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "07415452-a472-482c-ac3f-1083d17b650b",
+  "versionId": "8d5476be-fa00-45f6-ab2b-d0144383fcef",
   "meta": {
     "instanceId": "a3ac0f7efedaa0d446b4a1394dcd4eb54d9c4adf3e9b048bf3e92872dd3c90aa"
   },
   "id": "1HEyhiAHm_tvydq_rmEQk",
-  "tags": []
+  "tags": [
+    {
+      "updatedAt": "2026-05-24T13:08:43.173Z",
+      "createdAt": "2026-05-24T13:08:43.173Z",
+      "id": "cJgNlY3X1jV7aeEd",
+      "name": "main"
+    }
+  ]
 }

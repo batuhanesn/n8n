@@ -10,10 +10,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1,
       "position": [
-        656,
-        48
+        592,
+        -288
       ],
-      "id": "ad8903f6-484b-498e-ad1d-37c17c69613d",
+      "id": "fcdccb87-5f6b-4f4e-b1ac-f8e9be68b94a",
       "name": "dosya işleme1"
     },
     {
@@ -69,10 +69,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        976,
-        48
+        912,
+        -288
       ],
-      "id": "adff3d32-d1f6-442b-b428-715e48630948",
+      "id": "91aaab34-9ad8-49f8-8030-027dee11cfe1",
       "name": "veri standartizasyonu1"
     },
     {
@@ -87,10 +87,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        512,
-        432
+        448,
+        96
       ],
-      "id": "f91d2c3b-7e4b-4398-aaaf-8a10e965bb57",
+      "id": "d02be9b9-70e9-494b-9d97-0cf9c4c2e578",
       "name": "konu taslağı üretimi1"
     },
     {
@@ -152,10 +152,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1184,
-        432
+        1120,
+        96
       ],
-      "id": "b872c344-fafe-4572-a5ae-d19496b70d08",
+      "id": "50d0ea43-d948-40d8-9bb8-174b6b7ee08c",
       "name": "veri standartizasyonu3"
     },
     {
@@ -165,10 +165,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        672,
-        640
+        608,
+        304
       ],
-      "id": "3085108f-16a6-4473-98d3-eeb4264d7972",
+      "id": "0fa13a28-6872-4ddd-b258-1219e9b75693",
       "name": "Structured Output Parser1"
     },
     {
@@ -181,10 +181,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        0,
-        80
+        -64,
+        -256
       ],
-      "id": "4f77fb05-fcf3-4cdc-b452-f6c0c20d4245",
+      "id": "225168ec-d266-49f6-b307-c214dedfa889",
       "name": "Sticky Note9"
     },
     {
@@ -196,10 +196,10 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        1472,
-        432
+        1408,
+        96
       ],
-      "id": "eacb70b3-2777-4342-a949-cd7a84c460c8",
+      "id": "73e94a7e-970e-471c-921f-095dcfdf92fd",
       "name": "Split Out"
     },
     {
@@ -209,10 +209,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        2048,
-        352
+        1984,
+        16
       ],
-      "id": "dbf7efde-dcc8-4e54-a0ef-747a73e39296",
+      "id": "c51d9eac-6c93-4800-9fe1-a2dce9261e8e",
       "name": "Code1"
     },
     {
@@ -256,10 +256,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        3856,
-        720
+        3792,
+        384
       ],
-      "id": "9c374532-fbb7-4102-9e6b-3a36ad927057",
+      "id": "57d66060-c20c-43df-9ede-3c32cee80f96",
       "name": "Edit Fields1"
     },
     {
@@ -269,10 +269,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3648,
-        720
+        3584,
+        384
       ],
-      "id": "18f22a2f-45fc-492a-87ff-82f75f7ce811",
+      "id": "5bb6d2c8-c0ed-4bb9-81a0-fe0d5e3d7889",
       "name": "Code2"
     },
     {
@@ -282,10 +282,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3072,
-        752
+        3008,
+        416
       ],
-      "id": "14bb1512-1f0e-4608-a4e3-ba799fdaebf6",
+      "id": "b5aa9f64-e9f0-4c37-a9ff-71f1dbb622da",
       "name": "Code"
     },
     {
@@ -298,10 +298,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        3264,
-        640
+        3200,
+        304
       ],
-      "id": "f2e6e7a5-6fca-4aad-a416-c99f19f83636",
+      "id": "2e156106-0869-4620-9544-a2a6fcc74655",
       "name": "Sticky Note4",
       "disabled": true
     },
@@ -317,10 +317,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        3296,
-        720
+        3232,
+        384
       ],
-      "id": "bad1dbc0-1cde-4843-bec6-eaca061dfefa",
+      "id": "2f56091c-dd40-4f7c-adb3-c8cd2c6457c3",
       "name": "Slide Üretme"
     },
     {
@@ -331,10 +331,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        3504,
-        896
+        3440,
+        560
       ],
-      "id": "e4c23d40-b47b-4d76-a16b-03a52386b441",
+      "id": "c09486a8-7e6a-4106-9187-95d42a3ada93",
       "name": "Structured Output Parser"
     },
     {
@@ -347,10 +347,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        2400,
-        640
+        2336,
+        304
       ],
-      "id": "530919ae-238f-4b96-aacf-432ef34c413d",
+      "id": "4b6fe187-f3ad-4776-a005-43cc6ad0673f",
       "name": "Sticky Note3",
       "disabled": true
     },
@@ -363,10 +363,10 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        1744,
-        432
+        1680,
+        96
       ],
-      "id": "3ca27bdf-76e4-44f4-b059-ee087547ad8c",
+      "id": "8a9f0dcf-c51f-4086-ba01-901126ac3fb0",
       "name": "Loop Over Items"
     },
     {
@@ -377,10 +377,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        2064,
-        960
+        2000,
+        624
       ],
-      "id": "7f3e0ac6-c7f9-46b5-bb74-05d748acb5c3",
+      "id": "7e4775d9-835e-497b-b70a-ac0aa45883db",
       "name": "Structured Output Parser3"
     },
     {
@@ -395,10 +395,10 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 2.1,
       "position": [
-        1984,
-        768
+        1920,
+        432
       ],
-      "id": "a585a22f-21c0-4da7-92e1-9aaf128b3c87",
+      "id": "7a5132de-3a04-4567-b51c-eaef6b02d72f",
       "name": "İçerik Üretimi1"
     },
     {
@@ -411,10 +411,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1824,
-        640
+        1760,
+        304
       ],
-      "id": "5c9ce9cb-0603-4824-9ac8-2eb0d476ef3d",
+      "id": "a90a01ef-f70f-4494-bb1f-08e6dfcf6ff2",
       "name": "Sticky Note2",
       "disabled": true
     },
@@ -428,10 +428,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1696,
-        560
+        1632,
+        224
       ],
-      "id": "4c292817-5d85-4a16-94c8-2643d3939bae",
+      "id": "4a019da9-c03b-49a8-a266-1e451f79e53f",
       "name": "Sticky Note",
       "disabled": true
     },
@@ -444,11 +444,11 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "position": [
-        2000,
-        256
+        1936,
+        -80
       ],
       "typeVersion": 1,
-      "id": "3223feee-3848-4ede-944f-ceb388421dc4",
+      "id": "7946dc8e-dcda-4034-841d-5af51befff2f",
       "name": "Sticky Note1"
     },
     {
@@ -463,27 +463,25 @@
         "text": "={{ $('İçerik Üretimi1').item.json.output.Script_SesFormat }}",
         "additionalOptions": {
           "model": {
-            "__rl": true,
-            "value": "eleven_monolingual_v1",
             "mode": "list",
-            "cachedResultName": "Eleven English v1"
+            "value": "eleven_multilingual_v2"
           },
-          "languageCode": "tr"
+          "outputFormat": "mp3_44100_128"
         },
         "requestOptions": {}
       },
       "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
       "typeVersion": 1,
       "position": [
-        2464,
-        752
+        2400,
+        416
       ],
-      "id": "3236e416-65c1-400e-a545-9c359ee598b5",
+      "id": "307c7ad9-b11b-4cb5-9d3c-32e2728ec317",
       "name": "Convert text to speech1",
       "credentials": {
         "elevenLabsApi": {
-          "id": "y4UV68qRVM0SieuE",
-          "name": "sirket"
+          "id": "DqAasEK94JcQJCbu",
+          "name": "ElevenLabs account"
         }
       }
     },
@@ -497,15 +495,15 @@
       "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
       "typeVersion": 1,
       "position": [
-        2960,
-        752
+        2896,
+        416
       ],
-      "id": "1633f4d4-f960-4067-b9ea-34fefeb73437",
+      "id": "bebd4d8c-0e14-497b-880d-1b69c24d514d",
       "name": "Transcribe audio or video",
       "credentials": {
         "elevenLabsApi": {
-          "id": "y4UV68qRVM0SieuE",
-          "name": "sirket"
+          "id": "DqAasEK94JcQJCbu",
+          "name": "ElevenLabs account"
         }
       }
     },
@@ -516,15 +514,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        496,
-        640
+        432,
+        304
       ],
-      "id": "8b03aadd-abba-47ea-8e7e-eff7b648d1e6",
+      "id": "5cc0700a-2f94-4081-a9d2-d8caeaa9d766",
       "name": "Google Gemini Chat Model",
       "credentials": {
         "googlePalmApi": {
-          "id": "fRgOfFmufmEG22la",
-          "name": "efe gemini"
+          "id": "Nq2L41eVhdGJ6wqs",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -593,36 +591,37 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.2,
       "position": [
-        416,
-        48
+        352,
+        -288
       ],
-      "id": "699daea8-90cb-4c62-9cda-b8f26bd3685b",
+      "id": "a4bdbf9b-6ff3-4746-89f6-8b560362df07",
       "name": "On form submission1",
-      "webhookId": "5928e5ed-6429-4add-ad49-d2b7dbd17e00"
+      "webhookId": "aecbee1a-b5c4-4bd9-82b1-f611fbc71783"
     },
     {
       "parameters": {
+        "modelName": "=models/gemini-2.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        1872,
-        1008
+        1808,
+        672
       ],
-      "id": "69533060-a0b9-429c-8123-957b2e610787",
+      "id": "8958c62b-7fc0-4cc2-834a-9f46800dbcc5",
       "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
-          "id": "fRgOfFmufmEG22la",
-          "name": "efe gemini"
+          "id": "Nq2L41eVhdGJ6wqs",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://127.0.0.1:8000/folders/{{ $('veri standartizasyonu1').item.json['Döküman'] }}",
+        "url": "=http://127.0.0.1:8000/folders/{{ encodeURIComponent($('veri standartizasyonu1').first().json['Proje Adı']) }}",
         "options": {
           "allowUnauthorizedCerts": true
         }
@@ -630,29 +629,37 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        912,
-        432
+        848,
+        96
       ],
-      "id": "f66767ed-c7ad-4c2b-bce4-92ae6039523e",
+      "id": "bf4d9761-a862-46db-b4a0-e2a5c5ab0131",
       "name": "Klasör oluştur"
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "=http://127.0.0.1:8000/files/{{ $('veri standartizasyonu3').item.json['Döküman'] }}",
+        "url": "=http://127.0.0.1:8000/files/{{ encodeURIComponent($('veri standartizasyonu1').item.json['Proje Adı']) }}/Konu{{ $('İçerik Üretimi1').item.json.output.KonuId }}/Ses{{ $('İçerik Üretimi1').item.json.output.KonuId }}.mp3",
         "sendBody": true,
-        "contentType": "binaryData",
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        2704,
-        752
+        2640,
+        416
       ],
-      "id": "def4b076-b968-4c1d-8521-a00ba07a443d",
-      "name": "HTTP Request",
-      "disabled": true
+      "id": "b5057336-4477-46c6-9629-f72d5c48a7bd",
+      "name": "HTTP Request"
     },
     {
       "parameters": {
@@ -661,15 +668,15 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        3296,
-        928
+        3232,
+        592
       ],
-      "id": "dffa8852-18ab-428c-a4e8-37bfac5b63b5",
+      "id": "06906f3c-ae78-4718-bdce-d03f25f884d4",
       "name": "Google Gemini Chat Model2",
       "credentials": {
         "googlePalmApi": {
-          "id": "fRgOfFmufmEG22la",
-          "name": "efe gemini"
+          "id": "Nq2L41eVhdGJ6wqs",
+          "name": "Google Gemini(PaLM) Api account"
         }
       }
     },
@@ -698,43 +705,14 @@
       "type": "n8n-nodes-base.executeWorkflow",
       "typeVersion": 1.2,
       "position": [
-        4096,
-        720
+        4032,
+        384
       ],
-      "id": "490cfbdd-ff8f-4eb7-883a-9b052e06787a",
+      "id": "1f87a0aa-b625-4dbb-9693-ad5db893e6c7",
       "name": "Call 'TEST_Child'"
     }
   ],
   "pinData": {
-    "Convert text to speech1": [
-      {
-        "json": {
-          "date": "Sun, 24 May 2026 13:02:01 GMT",
-          "server": "uvicorn",
-          "request-id": "0XGrAY1tupuM7LH1Ktx0",
-          "access-control-expose-headers": "request-id, history-item-id, character-cost, regeneration-count, generation-info, current-concurrent-requests, maximum-concurrent-requests",
-          "history-item-id": "kbS3zjNhdlDVHFnxsWXX",
-          "current-concurrent-requests": "1",
-          "workspace-concurrent-requests": "1",
-          "maximum-concurrent-requests": "3",
-          "character-cost": "318",
-          "tts-latency-ms": "4643",
-          "content-type": "audio/mpeg",
-          "vary": "Accept-Language, Accept-Encoding",
-          "access-control-allow-origin": "*",
-          "access-control-allow-headers": "*",
-          "access-control-allow-methods": "POST, PATCH, OPTIONS, DELETE, GET, PUT",
-          "access-control-max-age": "600",
-          "strict-transport-security": "max-age=1800;",
-          "x-trace-id": "60fa96f7e490f0aba7991372269edfe7",
-          "x-region": "europe-west4",
-          "via": "1.1 google",
-          "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-          "connection": "close",
-          "transfer-encoding": "chunked"
-        }
-      }
-    ],
     "Transcribe audio or video": [
       {
         "json": {
@@ -3226,24 +3204,23 @@
       ]
     }
   },
-  "active": true,
+  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "binaryMode": "separate",
-    "availableInMCP": false
+    "binaryMode": "separate"
   },
-  "versionId": "33c9fcc5-bd4e-48b7-bc9b-4f533e1240ca",
+  "versionId": "1d37c33e-39c9-4b01-9356-2b71430038c3",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "a3ac0f7efedaa0d446b4a1394dcd4eb54d9c4adf3e9b048bf3e92872dd3c90aa"
+    "instanceId": "c079444bd27b8d7316c5d7b18352852b3359b8bfefc7c384e69603e45480f986"
   },
-  "id": "97PmRf6cvjBJtWmPbQNL0",
+  "id": "vr2F2zpX54pZ6pUB",
   "tags": [
     {
-      "updatedAt": "2026-05-24T13:08:43.173Z",
-      "createdAt": "2026-05-24T13:08:43.173Z",
-      "id": "cJgNlY3X1jV7aeEd",
-      "name": "main"
+      "name": "main",
+      "id": "UYSGUTVDtg8LLhQL",
+      "updatedAt": "2026-05-26T09:13:15.726Z",
+      "createdAt": "2026-05-26T09:13:15.726Z"
     }
   ]
 }

@@ -1,0 +1,1066 @@
+{
+  "name": "MAIN",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "File",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        784,
+        2656
+      ],
+      "id": "0a0c4ebb-6f3d-4376-b585-f642a7897486",
+      "name": "dosya işleme"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a307505-bf50-4d34-ba2d-1d8c38a06bb4",
+              "name": "KullanıcıPromptu",
+              "value": "={{ $('On form submission').item.json['Prompt gir'] }}",
+              "type": "string"
+            },
+            {
+              "id": "1dc57b40-d2b2-481b-98a1-018113403165",
+              "name": "EgitimMateryali",
+              "value": "={{ $('dosya işleme').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "9a5efcd1-fc72-46d5-a85d-e9cea44cc362",
+              "name": "IcerikUzunluk",
+              "value": "={{ $('On form submission').item.json.uzunluk }}",
+              "type": "string"
+            },
+            {
+              "id": "5eed797c-ef6b-4292-aea8-3e32c4d0a852",
+              "name": "IcerikKitleSeviyesi",
+              "value": "={{ $('On form submission').item.json.Seviye }}",
+              "type": "string"
+            },
+            {
+              "id": "7f809120-d81b-4f64-aded-f20b57748f36",
+              "name": "Konu Sayısı",
+              "value": "={{ $('On form submission').item.json.uzunluk?.toLowerCase() === 'kısa' ? 3 : 6 }}\n",
+              "type": "string"
+            },
+            {
+              "id": "e153f868-ee9c-4406-938a-ba4df59bc73e",
+              "name": "Döküman",
+              "value": "={{ Math.floor(Math.random() * 100) }}",
+              "type": "string"
+            },
+            {
+              "id": "37983ab0-e0a7-46ac-9b93-fd6ff4c9529d",
+              "name": "Proje Adı",
+              "value": "={{ $('On form submission').item.json['Proje Adı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        2656
+      ],
+      "id": "de0d223b-b6a3-4b43-9516-e18866116b4a",
+      "name": "veri standartizasyonu"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=KullanıcıPromptu: {{ $json['KullanıcıPromptu'] }}\n\nEgitimMateryali: {{ $json.EgitimMateryali }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=Sen deneyimli bir video içerik tasarımcısısın.\n\nGirdi parametreleri:\n• KullaniciPromptu   → Videonun hedefi / odak noktası  \n• EgitimMateryali    → İşlenecek kaynak metin (parse edilmiştir)  \n\nGörev: EgitimMateryali’ni inceleyerek öğretici video için maksimum {{ $json['Konu Sayısı'] }} konu sayısından oluşan KullanıcıPromptunu karşılayan bir konu taslağı çıkarmak.  \n\n\nHer konu nesnesi yalnızca aşağıdaki üç alanı içerir (başka anahtar ekleme):\n\n1. \"icerik\"  : Konuda anlatılacak temel fikirlerin 2-3 cümlelik özeti  \n2. \"amac\"    : İzleyicinin bölümden öğreneceği bilgi / beceri  \n3. \"anahtar_kelimeler\" : 3-6 maddelik anahtar kelime dizisi (her biri tek sözcük veya kısa tamlama)\n\nKurallar\n- Kaynaktan kopyalama yapma; içerikleri yeniden formüle et.  \n- Açıklamalar sade, teknik olmayan dilde olsun.  \n- Çıktı yalnızca geçerli JSON olsun; yorum, satır sonu açıklaması, fazladan alan vb. ekleme.  \n- Nesne ve alan adlarını bire bir koru, sıralamayı icerik → amac → anahtar_kelimeler şeklinde tut.\n\n---\n\n#### Örnek Çıktı (kısa video ⇒ 2 konu gösterimi)\n\n{\n  \"konular\": [\n    {\n      \"konu_id\": 1,\n      \"icerik\": \"Bu bölüm, konunun tarihsel gelişimini özetleyerek temel kavramları tanıtır.\",\n      \"amac\": \"İzleyici, kavramın nasıl ortaya çıktığını ve neden önemli olduğunu kavrar.\",\n      \"anahtar_kelimeler\": \"tarihçe, temel_kavram, giriş\"\n    },\n    {\n      \"konu_id\": 2,\n      \"icerik\": \"Bu bölümde yöntemin adım adım nasıl uygulandığı örneklerle açıklanır.\",\n      \"amac\": \"İzleyici, yöntemi kendi projesinde uygulamak için gerekli adımları öğrenir.\",\n      \"anahtar_kelimeler\": \"uygulama, adımlar, örnek\"\n    }\n  ]\n}\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        640,
+        3040
+      ],
+      "id": "29eb4cde-95e1-4a63-9a3a-e6df91763cba",
+      "name": "konu taslağı üretimi"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7bb51b06-1623-43ed-b628-4b1707189be7",
+              "name": "KullaniciPromptu",
+              "value": "={{ $('veri standartizasyonu').item.json['KullanıcıPromptu'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e2c17ca9-5833-4955-819e-34ccdb9d8085",
+              "name": "EgitimMateryali",
+              "value": "={{ $('veri standartizasyonu').item.json.EgitimMateryali }}",
+              "type": "string"
+            },
+            {
+              "id": "efb4d60b-b4fc-49e9-8fc9-11a9626cce9c",
+              "name": "IcerikUzunluk",
+              "value": "={{ $('veri standartizasyonu').item.json.IcerikUzunluk }}",
+              "type": "string"
+            },
+            {
+              "id": "5107666e-7f41-4896-97fa-977282a820f8",
+              "name": "IcerikKitleSeviyesi",
+              "value": "={{ $('veri standartizasyonu').item.json.IcerikKitleSeviyesi }}",
+              "type": "string"
+            },
+            {
+              "id": "0d203b60-61a9-4928-b58f-bc844e8dd89b",
+              "name": "Bölümler",
+              "value": "={{ $('konu taslağı üretimi').item.json.output }}",
+              "type": "object"
+            },
+            {
+              "id": "860d0c97-ead2-4d39-8867-f57dc10cf796",
+              "name": "Döküman",
+              "value": "={{ $('veri standartizasyonu').item.json['Döküman'] }}",
+              "type": "string"
+            },
+            {
+              "id": "a570e914-b010-409c-b7fb-aebe20c0c98d",
+              "name": "KonuSayısı",
+              "value": "={{ Math.max.apply(null, $('konu taslağı üretimi').item.json.output.konular.map(k => k.konu_id)) }}",
+              "type": "number"
+            },
+            {
+              "id": "d18b9b5b-0d3a-4a73-95a3-a084ae6f7f3e",
+              "name": "ProjeAdı",
+              "value": "={{ $('veri standartizasyonu').item.json['Proje Adı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1312,
+        3040
+      ],
+      "id": "0350111a-b80d-4d8b-8246-0ca9b0a448de",
+      "name": "veri standartizasyonu4"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\"konular\": [{\"konu_id\": 1,\"icerik\": \"Bu bölüm, konunun tarihsel gelişimini özetleyerek temel kavramları tanıtır.\", \"amac\": \"İzleyici, kavramın nasıl ortaya çıktığını ve neden önemli olduğunu kavrar.\",\"anahtar_kelimeler\": \"tarihçe, temel_kavram, giriş\"},{\"konu_id\": 2,\"icerik\": \"Bu bölümde yöntemin adım adım nasıl uygulandığı örneklerle açıklanır.\",\"amac\": \"İzleyici, yöntemi kendi projesinde uygulamak için gerekli adımları öğrenir.\",\"anahtar_kelimeler\": \"uygulama, adımlar, örnek\"}]}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        864,
+        3264
+      ],
+      "id": "19245267-34bf-4aa7-9b14-62f400838500",
+      "name": "Structured Output Parser2"
+    },
+    {
+      "parameters": {
+        "content": "# Kullanıcı Girdisi\n## Form Submission\n## PDF Parsing\n## Create Doc\n## Edit Fields\n## LLM: Konu Taslağı Üret\n### Doc Update\n## Edit Fields\n## Split Out",
+        "height": 736,
+        "width": 1600,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        128,
+        2688
+      ],
+      "id": "848ad128-6952-4599-a1cb-d0828100151d",
+      "name": "Sticky Note10"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "['Bölümler'].konular",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        1600,
+        3040
+      ],
+      "id": "49101264-8f7e-4fc9-bb1b-e7e9bae4b2db",
+      "name": "Split Out1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da741e28-e211-4737-b8d5-91a0310b9ead",
+              "name": "KonuId",
+              "value": "={{ $json.KonuId }}",
+              "type": "number"
+            },
+            {
+              "id": "f0095469-7de6-4596-af7c-3e31cdb32f5c",
+              "name": "SlideCount",
+              "value": "={{ $json.SlideCount }}",
+              "type": "number"
+            },
+            {
+              "id": "62d14bea-9b97-4554-be45-1c571ec5e909",
+              "name": "SaniyeBundle",
+              "value": "={{ $json.SaniyeBundle }}",
+              "type": "array"
+            },
+            {
+              "id": "c4222e65-b6db-4ac8-aaf0-323b3dfcba66",
+              "name": "output",
+              "value": "={{ $('Slide Üretme1').first().json.output }}",
+              "type": "object"
+            },
+            {
+              "id": "0ad95819-0336-4f87-aa14-3231616ef649",
+              "name": "ProjeAdı",
+              "value": "={{ $('veri standartizasyonu4').first().json['ProjeAdı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3024,
+        3376
+      ],
+      "id": "4e80d090-4550-4c3d-a9b5-f803215f2c78",
+      "name": "Edit Fields",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Function Item node\n// Input ($json): { output: { KonuId, slides: [{ id, start_time, end_time }], totalSlides? } }\n// Output: { KonuId: number, SlideCount: number, SaniyeBundle: number[] }\n\nconst out = $json.output ?? $json;\nconst slides = Array.isArray(out?.slides) ? out.slides : [];\n\nconst numFromId = (s) => {\n  const m = String(s || \"\").match(/\\d+/);\n  return m ? Number(m[0]) : Number.POSITIVE_INFINITY;\n};\n\nconst slidesSorted = [...slides].sort((a, b) => {\n  const ta = Number(a?.start_time) || 0;\n  const tb = Number(b?.start_time) || 0;\n  if (ta !== tb) return ta - tb;\n  return numFromId(a?.id) - numFromId(b?.id);\n});\n\nconst SaniyeBundle = slidesSorted.map(s => {\n  const start = Number(s?.start_time) || 0;\n  const end = Number(s?.end_time) || 0;\n  const dur = Math.max(0, end - start);\n  return Number(dur.toFixed(3));\n});\n\nconst KonuId = Number(out?.KonuId) || 0;\nconst SlideCount = slidesSorted.length;\n\nreturn { KonuId, SlideCount, SaniyeBundle };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3184,
+        3376
+      ],
+      "id": "8999523b-247d-4971-8635-d75f22c94322",
+      "name": "Code4",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "# Slide Üretme\n",
+        "height": 368,
+        "width": 736,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        3296
+      ],
+      "id": "77b6422b-f75a-4a9b-8253-a2486430f1bb",
+      "name": "Sticky Note5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Transcript:  {{ $json.result }}\nAudioDuration: {{ $json.audioDuration }}\nKonuId: {{ $json.KonuId }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=You are an AI Agent in n8n. Your input is:\n  • A transcript with embedded timestamps (format [[start-end]])\n  • The total audio duration in seconds\n\nYour output must be a single JSON object with:\n{\n  \"KonuId\": \"{{ $json.KonuId }}\",\n  \"slides\": [\n    {\n      \"id\": \"Slide1\",\n      \"start_time\": 0.099,\n      \"end_time\": 19.499,\n      \"type\": \"headline\",\n      \"content\": \"Riskli coğrafi konumumuz nedeniyle hazırlıklı olmak hayati öneme sahiptir.\"\n    },\n    {\n      \"id\": \"Slide2\",\n      \"start_time\": 20.000,\n      \"end_time\": 30.039,\n      \"type\": \"bullet\",\n      \"content\": \"Deprem çantasında olması gerekenler:`n`n- Fener ve yedek piller\\n- Taşınabilir radyo\\n- Temel ilk yardım kiti\\n- Su ve dayanıklı atıştırmalıklar\"\n    }\n  ],\n  \"totalSlides\": 2\n}\n\n\nSlide Type Determination:\n  • “headline”: for a single, standalone, high-impact statement that sets the tone  \n  • “bullet”: for a list of related items or steps. *Begin with a concise explanatory heading ending with a colon, then list each item on its own line, separated by “\\n\\n”\n\nFormatting and Rules:\n  1. Generate **new*, supportive slide text—do not copy the transcript verbatim.  \n  2. Cover all meaningful segments using as few slides as necessary.  \n  3. Align each slide’s start_time and end_time exactly with the transcript timestamps.  \n  4. Ensure each slide’s end_time is strictly less than the next slide’s start_time.  \n  5. Respect the speaker’s intent and emotional emphasis; paraphrase to support the narrative.  \n  6. Output valid JSON only, with no additional prose outside the object.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        2672,
+        3376
+      ],
+      "id": "5db90566-bbc6-46ff-95e2-b052b8476f03",
+      "name": "Slide Üretme1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"KonuId\": \"{{ $json.KonuId }}\",\n  \"slides\": [\n    {\n      \"id\": \"Slide1\",\n      \"start_time\": 0.099,\n      \"end_time\": 19.499,\n      \"type\": \"headline\",\n      \"content\": \"Riskli coğrafi konumumuz nedeniyle hazırlıklı olmak hayati öneme sahiptir.\"\n    },\n    {\n      \"id\": \"Slide2\",\n      \"start_time\": 20.000,\n      \"end_time\": 30.039,\n      \"type\": \"bullet\",\n      \"content\": \"Deprem çantasında olması gerekenler:`n`n- Fener ve yedek piller\\n- Taşınabilir radyo\\n- Temel ilk yardım kiti\\n- Su ve dayanıklı atıştırmalıklar\"\n    }\n  ],\n  \"totalSlides\": 2\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2880,
+        3552
+      ],
+      "id": "a0d084f3-9acf-4552-a9c8-206f9dca5a55",
+      "name": "Structured Output Parser4"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": "={{ false }}"
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        1872,
+        3040
+      ],
+      "id": "a7d1b89e-fb13-4fc5-a4d0-764b3790e81e",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"Icerik\": \"<insert the incoming Icerik variable exactly as received>\",\n  \"Script_SesFormat\": \"<combine the content with the generated script, enriched with the required ElevenLabs syntax, ready for narration>\",\n  \"KonuId\": \"<{{ $json['Bölümler'].konular[0].konu_id }}>\"\n}\n",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        2192,
+        3568
+      ],
+      "id": "e910f5c0-f9a3-43f1-b1c2-7ee2646081c7",
+      "name": "Structured Output Parser5"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=• Icerik                → {{ $json['[\\'Bölümler\\'].konular'].icerik }}\n• Amac                  → {{ $json['[\\'Bölümler\\'].konular'].amac }}\n• Anahtar_Kelimeler     → {{ $json['[\\'Bölümler\\'].konular'].anahtar_kelimeler }}\n• HedefKitleSeviyesi    →  {{ $json.IcerikKitleSeviyesi }}\n• VideoUzunlugu    → {{ $json.IcerikUzunluk }}\n• KonuId           → {{ $json['[\\'Bölümler\\'].konular'].konu_id }}",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "options": {
+          "systemMessage": "=Sen deneyimli bir video içerik tasarımcısı ve metin yazarı olan bir AI agentsın.\n\n🔹 Girdi Parametreleri\n• Icerik → Kullanıcının sağladığı ana konu açıklaması (string)\n• Amac → Bu Icerik'in izleyiciye kazandıracağı hedef (string)\n• Anahtar_Kelimeler → [\"...\", \"...\", ...] biçiminde tam anahtar kelime listesi\n• VideoUzunlugu → \"kısa\" veya \"uzun\"\n• HedefKitleSeviyesi → \"yeni başlayan\" veya \"deneyimli\"\n\n🔹 Görevler\n\nMetin Oluşturma\nIcerik + Amac’ın bütününü, Anahtar_Kelimeler’i harfiyen içinde geçirerek tutarlı ve akıcı bir konuşma metni (Script) yaz.\nUzunluk\n• VideoUzunlugu = \"kısa\" ise en az 3 cümle,\n• VideoUzunlugu = \"uzun\" ise en az 10 cümle üret.\nÜst sınır serbest.\nHitap Şekli\nMetinde “Siz” hitabını kullan. Sadece ve Sadece konu_id 1 ise “Merhabalar” gibi giriş cümlesi kullan ve konu_id 1'inde başlangıcında olsun kesinlikle orta kısımlarında “Merhabalar” gibi giriş cümleleri olmasın. Konu_id 1 değil ise selamlama yapma; konuşmana devam ediyormuş gibi yaz.\nHedef Kitleye Uygunluk\n• “yeni başlayan” için: 10 yaşındaki bir çocuğun da kavrayacağı sade anlatım ve düşük teknik terim.\n• “deneyimli” için: Yoğun terminoloji ve profesyonel dil.\nMetin Bütünlüğü\nOrijinal anlamı bozma; gereksiz tekrar ve dolgu ifadelerden kaçın. Anahtar_Kelimeler’i değiştirme; bağlama uygun şekilde doğal akışta kullan.\nDinamik Akış\nGirişte merak uyandır; gelişmede öğretici ve enerjik ol; sonuçta güven ver. Bölümler arası geçişleri tutarlı kur.\n🔹 Çıktı Formatı (Zorunlu)\nAI çıktısı kesinlikle yalnızca aşağıdaki JSON yapısında olmalıdır — başka hiçbir anahtar, yorum veya metin eklenmeyecektir:\n\n{\n  \"Icerik\": \"<gelen Icerik değişkenini aynen koy>\",\n  \"Script_SesFormat\": \"<Icerik ve oluşturduğun Script’i birleştir; tek blok hâlinde sun; TTS veya etiket kullanma>\"\n  \"KonuId\": \"<{{ $json['[\\'Bölümler\\'].konular'].konu_id }}>\"\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        2112,
+        3376
+      ],
+      "id": "744e5962-2883-4539-85f4-96303056d95b",
+      "name": "İçerik Üretimi"
+    },
+    {
+      "parameters": {
+        "content": "# Script Üretimi\n## LLM: Script Üret",
+        "height": 512,
+        "width": 496,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1952,
+        3248
+      ],
+      "id": "a1a5e22c-ae1a-447c-987e-bec434e292ea",
+      "name": "Sticky Note7",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# LOOP",
+        "height": 784,
+        "width": 2404,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1824,
+        3168
+      ],
+      "id": "bb07b9f4-2dc2-438c-9e13-1a489796727e",
+      "name": "Sticky Note8",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "# PPTX oluşturma",
+        "height": 256,
+        "width": 320,
+        "color": "#C800FF"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2464,
+        2864
+      ],
+      "typeVersion": 1,
+      "id": "64714eb3-bd6a-4e77-9692-78d75dfe2e91",
+      "name": "Sticky Note11"
+    },
+    {
+      "parameters": {
+        "formTitle": "form",
+        "formDescription": "içerik",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Proje Adı",
+              "placeholder": "Proje Adı",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "File",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .docx",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Prompt gir",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "uzunluk",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "uzun"
+                  },
+                  {
+                    "option": "kısa"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Seviye",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "yeni başlayan"
+                  },
+                  {
+                    "option": "deneyimli"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {
+          "buttonLabel": "Gönder",
+          "respondWithOptions": {
+            "values": {
+              "formSubmittedText": "Gönderildi"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        544,
+        2656
+      ],
+      "id": "41ab66c9-b6f8-47f2-91f6-eeace0461346",
+      "name": "On form submission",
+      "webhookId": "d48e0819-41af-4c93-a6dd-1d0f5a8bafd6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://192.168.1.147:8000/folders/{{ encodeURIComponent($('veri standartizasyonu').first().json['Proje Adı']) }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        3040
+      ],
+      "id": "6a4dcd06-1911-4689-add6-ada5e2329b13",
+      "name": "Klasör oluştur1"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "cyzHcZq2iFX3akeD",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/cyzHcZq2iFX3akeD",
+          "cachedResultName": "CHILD"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        4048,
+        3376
+      ],
+      "id": "b9008ef4-747c-4e17-9011-be80a0faa24a",
+      "name": "Call 'TEST_Child'1",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1648,
+        3968
+      ],
+      "id": "8633c6fe-9bea-4cf1-afa1-4770c502f8c6",
+      "name": "efegemini",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "QeUFfyXeREdK50tt",
+          "name": "yusuf"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        3936
+      ],
+      "id": "26dd40cd-7fc5-43cb-a26b-963ea98a86dc",
+      "name": "Google Gemini Chat Model",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "69aSXx6IWrkGl94n",
+          "name": "cuneyt gemini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.148:9000/generate-pptx",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "proje_adi",
+              "value": "={{ $('Code in JavaScript').item.ProjeAdi }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2512,
+        2960
+      ],
+      "id": "63ffedb9-1ecd-43b4-b735-7052e0d9d887",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://192.168.1.147:8000/files/{{ encodeURIComponent($json.ProjeAdi) }}/Konu{{ $json.KonuId }}/{{ $json.SlideId }}.txt",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3776,
+        3376
+      ],
+      "id": "92aba5af-e608-4a26-9a7b-ce840447272e",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const results = [];\n\n// Verileri önceki düğümün ne verdiğine bakmaksızın, doğrudan asıl kaynaklarından çekiyoruz\nconst output = $('Slide Üretme1').first().json.output || {};\nconst slides = output.slides || [];\nconst konuId = output.KonuId || \"0\";\nconst projeAdi = $('veri standartizasyonu4').first().json['ProjeAdı'] || \"VarsayilanProje\";\n\n// Her slaytı ayrı bir dosyaya dönüştürüyoruz\nfor (const slide of slides) {\n  const textContent = slide.content || \"\";\n  const slideId = slide.id || \"Slide\";\n\n  const buffer = Buffer.from(textContent, 'utf8');\n\n  results.push({\n    json: {\n      KonuId: konuId,\n      SlideId: slideId,\n      ProjeAdi: projeAdi\n    },\n    binary: {\n      data: {\n        data: buffer.toString('base64'),\n        mimeType: 'text/plain',\n        fileName: `Konu${konuId}_${slideId}.txt`\n      }\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3600,
+        3376
+      ],
+      "id": "5b8fa3d5-f107-433c-bb98-307df7828875",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "da741e28-e211-4737-b8d5-91a0310b9ead",
+              "name": "KonuId",
+              "value": "={{ $('Code in JavaScript').item.json.KonuId }}",
+              "type": "number"
+            },
+            {
+              "id": "f0095469-7de6-4596-af7c-3e31cdb32f5c",
+              "name": "SlideCount",
+              "value": "={{ $('Code in JavaScript').item.json.KonuId }}",
+              "type": "number"
+            },
+            {
+              "id": "62d14bea-9b97-4554-be45-1c571ec5e909",
+              "name": "SaniyeBundle",
+              "value": "={{ $('Code4').item.json.SaniyeBundle }}",
+              "type": "array"
+            },
+            {
+              "id": "c4222e65-b6db-4ac8-aaf0-323b3dfcba66",
+              "name": "output",
+              "value": "={{ $('Slide Üretme1').first().json.output }}",
+              "type": "object"
+            },
+            {
+              "id": "0ad95819-0336-4f87-aa14-3231616ef649",
+              "name": "ProjeAdı",
+              "value": "={{ $('veri standartizasyonu4').first().json['ProjeAdı'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3904,
+        3376
+      ],
+      "id": "d0d546ec-1201-43cf-8ef3-a7b73e14b536",
+      "name": "Edit Fields1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": "deepseek/deepseek-v3.2",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1536,
+        3952
+      ],
+      "id": "0490b1d1-618e-4582-9ac1-4d70fe961f47",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "64FqBRlIaiT9WWmj",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.debugHelper",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        2976
+      ],
+      "id": "ff5ed973-0abb-441d-bcfe-04fb0a8947ff",
+      "name": "DebugHelper"
+    },
+    {
+      "parameters": {
+        "jsCode": "const konuId = $json.KonuId;\nconst projeAdi = $('veri standartizasyonu4').first().json['ProjeAdı'] || \"VarsayilanProje\";\n\nconst content = JSON.stringify({\n  KonuId: $json.KonuId,\n  SlideCount: $json.SlideCount,\n  SaniyeBundle: $json.SaniyeBundle\n}, null, 2);\n\nconst buffer = Buffer.from(content, 'utf8');\n\nreturn [{\n  json: {\n    KonuId: konuId,\n    ProjeAdi: projeAdi,\n    FileName: `Konu${konuId}_SaniyeBundle.txt`\n  },\n  binary: {\n    data: {\n      data: buffer.toString('base64'),\n      mimeType: 'text/plain',\n      fileName: `Konu${konuId}_SaniyeBundle.txt`\n    }\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3392,
+        3376
+      ],
+      "id": "40f91cf5-2c4d-4636-b788-fe72d54c7336",
+      "name": "Code in JavaScript2",
+      "onError": "continueRegularOutput"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "dosya işleme": {
+      "main": [
+        [
+          {
+            "node": "veri standartizasyonu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "veri standartizasyonu": {
+      "main": [
+        [
+          {
+            "node": "konu taslağı üretimi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "konu taslağı üretimi": {
+      "main": [
+        [
+          {
+            "node": "Klasör oluştur1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "veri standartizasyonu4": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser2": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "konu taslağı üretimi",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Code4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code4": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slide Üretme1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser4": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Slide Üretme1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [
+          {
+            "node": "DebugHelper",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "İçerik Üretimi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser5": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "İçerik Üretimi",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "İçerik Üretimi": {
+      "main": [
+        [
+          {
+            "node": "Slide Üretme1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "dosya işleme",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Klasör oluştur1": {
+      "main": [
+        [
+          {
+            "node": "veri standartizasyonu4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'TEST_Child'1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "efegemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser5",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser4",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "İçerik Üretimi",
+            "type": "ai_languageModel",
+            "index": 1
+          },
+          {
+            "node": "Slide Üretme1",
+            "type": "ai_languageModel",
+            "index": 1
+          },
+          {
+            "node": "konu taslağı üretimi",
+            "type": "ai_languageModel",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Call 'TEST_Child'1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "İçerik Üretimi",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Slide Üretme1",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "konu taslağı üretimi",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Structured Output Parser2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DebugHelper": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e6531b7c-a7ea-4331-b281-a3f926d7bf98",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a3ac0f7efedaa0d446b4a1394dcd4eb54d9c4adf3e9b048bf3e92872dd3c90aa"
+  },
+  "id": "Knh4CKTFDFsoG9In",
+  "tags": [
+    {
+      "updatedAt": "2026-05-24T13:08:43.173Z",
+      "createdAt": "2026-05-24T13:08:43.173Z",
+      "id": "cJgNlY3X1jV7aeEd",
+      "name": "main"
+    }
+  ]
+}
